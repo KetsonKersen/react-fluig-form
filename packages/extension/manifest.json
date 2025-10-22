@@ -7,7 +7,6 @@
     "https://*.fluig.cloudtotvs.com.br/*",
     "https://diefraengenharia187713.fluig.cloudtotvs.com.br/*"
   ],
-  "background": { "service_worker": "background.js" },
   "content_scripts": [
     {
       "matches": [
