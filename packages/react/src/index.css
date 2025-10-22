@@ -1,0 +1,209 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.fluig-style-guide, 
+.fluig-style-guide * {
+  font-family: 'Open Sans', Arial, sans-serif !important;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('fonts/OpenSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+p{
+  margin: 0 !important;
+}
+h3{
+  margin-top: 0 !important;
+  margin-bottom: 8px 0 !important;
+}
+body{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #141F3A;
+  background: linear-gradient(133deg, rgba(20, 31, 58, 1) 0%, rgba(30, 27, 36, 1) 100%);
+}
+.container{
+  max-width: 1024px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  padding: 0px !important;
+}
+.container > .icons{
+  display: flex;
+  gap: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container > .icons > div{
+  width: 120px;
+  height: 120px;
+}
+.container > .icons > span{
+  font-size: 52px;
+  color: rgb(238, 236, 241);
+  font-weight: 900;
+}
+
+.container > .icons > .icon-react{
+  background-image: url("public/assets/react.png");
+  background-position: center;
+  background-size: 100%;
+}
+
+.container > .icons >  .icon-fluig{
+  background-image: url("public/assets/fluig.png");
+  background-position: center;
+  background-size: 100%;
+}
+
+
+.container > p{
+  max-width: 650px;
+  font-size: 16px;
+  text-align: center;
+  color: white;
+  margin: 32px 0 !important;
+}
+.container > .cards {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+.container > .cards > .card{
+  width: 100%;
+  height: 100%;
+  background-color: hsla(0, 0%, 1%, 0.05);
+  border: 1px solid #2e3847;
+  border-radius: 16px;
+  padding: 16px;
+  color: #7f87aa;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.436);
+}
+.container > .cards > .card > .title-card{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+}
+.container > .cards > .card > a{
+  font-weight: 400px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1756f3;
+  font-size: 16px;
+}
+.container > .commands{
+  width: 100%;
+  background-color: hsla(0, 0%, 1%, 0.2);
+  box-shadow: 2px 4px 7px rgba(0, 0, 0, 0.436);
+  border-radius: 16px;
+  border: 1px solid #2e3847;
+  padding: 16px;
+}
+.container > .commands > h3{
+  font-size: 18px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.container > .commands > div{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+.container > .commands > div > .command{
+  background-color: #7a7a7a1d;
+  border-radius: 8px;
+  padding: 8px;
+}
+.container > .commands > div > .command > .title-command{
+  font-size: 16px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.container > .commands > div > .command > .text-command{
+  color: #8c8c8d;
+}
+.controls{
+  max-width: 1024px;
+  margin: 16px auto;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+.controls > div {
+  color: #8c8c8d;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding-left: 16px;
+  cursor: pointer;
+  transition: .5s;
+}
+.controls > div > p{
+  margin: 0 !important;
+}
+.controls > div:hover {
+  border-color: #2e3847;
+  gap: 32px;
+}
+.controls > div > button {
+  background-color: #fdfdfd17;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .4s, color .4s, transform .3s;
+}
+.controls > div:hover > button {
+  background-color: #2e3847; 
+  color: #49da7e;
+  transform: scale(1.1);
+}
+.footer-inf{
+  width: 100%;
+  color: #7f87aa;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  padding: 32px;
+}
+
+.panel{
+  width: 400px;
+}

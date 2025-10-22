@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Capture WCMAPI (Fluig)",
+  "version": "1.0",
+  "permissions": ["scripting", "activeTab", "storage"],
+  "host_permissions": [
+    "https://*.fluig.cloudtotvs.com.br/*",
+    "https://diefraengenharia187713.fluig.cloudtotvs.com.br/*"
+  ],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.fluig.cloudtotvs.com.br/*",
+        "https://diefraengenharia187713.fluig.cloudtotvs.com.br/*"
+      ],
+      "js": ["content-script.js"],
+      "run_at": "document_end",
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["page-script.js"],
+      "matches": [
+        "https://*.fluig.cloudtotvs.com.br/*",
+        "https://diefraengenharia187713.fluig.cloudtotvs.com.br/*"
+      ]
+    }
+  ],
+  "icons": {}
+}
