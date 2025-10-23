@@ -3,12 +3,13 @@ import react from "@vitejs/plugin-react"
 import path from "path"
 import dotenv from "dotenv"
 
-dotenv.config({ path: path.resolve(__dirname, "../../.env") })
+dotenv.config({ path: path.resolve(__dirname, "../../.env"), quiet: true })
 
 const env = loadEnv(process.env.NODE_ENV, path.resolve(__dirname, "../../"), "")
 
 export default defineConfig({
   plugins: [react()],
+  logLevel: "info",
   define: {
     "import.meta.env.VITE_FLUIG_BASE_URL": JSON.stringify(
       env.VITE_FLUIG_BASE_URL

@@ -23,21 +23,25 @@
   }
 
   function getNestedProperty(obj, path) {
+    if (path === "") return obj
     return path.split(".").reduce((acc, key) => acc?.[key], obj)
   }
 
   async function executeFluigFunction(fluigFunctionPath, args = []) {
     const fn = getNestedProperty(parent, fluigFunctionPath)
+    if (fn === undefined) {
+      throw new Error(`O caminho não está disponivel`)
+    }
     if (typeof fn !== "function") {
-      throw new Error(`${fluigFunctionPath} não é uma função`)
+      throw new Error(`Não é uma função`)
     }
 
-    const context = fluigFunctionPath.includes("WCMAPI.")
-      ? getNestedProperty(
-          parent,
-          fluigFunctionPath.split(".").slice(0, -1).join(".")
-        )
-      : parent
+    const pathParts = fluigFunctionPath.split(".")
+
+    const contextPath =
+      pathParts.length > 1 ? pathParts.slice(0, -1).join(".") : ""
+
+    const context = getNestedProperty(parent, contextPath)
 
     return await fn.apply(context, args)
   }
@@ -60,6 +64,8 @@
         JSON.stringify({
           type: "FLUIG_METHOD_RESULT",
           id,
+          fluigFunctionPath,
+          args,
           result,
           error,
         })

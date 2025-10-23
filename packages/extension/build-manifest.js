@@ -3,7 +3,7 @@ import path from "path"
 import dotenv from "dotenv"
 
 const rootEnv = path.resolve(process.cwd(), ".env")
-dotenv.config({ path: rootEnv })
+dotenv.config({ path: rootEnv, debug: false })
 
 const extRoot = path.resolve("packages/extension")
 const templatePath = path.join(extRoot, "manifest.template.json")

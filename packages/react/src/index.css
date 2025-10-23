@@ -59,13 +59,13 @@ body{
 }
 
 .container > .icons > .icon-react{
-  background-image: url("public/assets/react.png");
+  background-image: url("/assets/react.png");
   background-position: center;
   background-size: 100%;
 }
 
 .container > .icons >  .icon-fluig{
-  background-image: url("public/assets/fluig.png");
+  background-image: url("/assets/fluig.png");
   background-position: center;
   background-size: 100%;
 }

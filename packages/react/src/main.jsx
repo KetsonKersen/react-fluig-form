@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 "../parentProxy";
@@ -33,9 +32,9 @@ import App from "./App.jsx";
       });
 
       createRoot(rootEl).render(
-        <StrictMode>
+        <>
           <App prefilledValues={prefilledValues} />
-        </StrictMode>
+        </>
       );
     } else {
       console.log("🚫 Visualização apenas — React não montado.");
