@@ -1,6 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Capture WCMAPI (Fluig)",
+  "name": "Fluig Method Capture",
+  "description": "Extensão para capturar e proxy de métodos do Fluig",
   "version": "1.0",
   "permissions": ["scripting", "activeTab", "storage"],
   "host_permissions": [

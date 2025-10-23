@@ -1,68 +1,61 @@
-const express = require("express")
-const cors = require("cors")
-const WebSocket = require("ws")
+import express from "express"
+import cors from "cors"
+import WebSocket, { WebSocketServer } from "ws"
 
 const app = express()
 app.use(cors())
 app.use(express.json())
-app.use(express.urlencoded({ extended: true })) // Express já tem
-// --- WS CONFIG ---
+app.use(express.urlencoded({ extended: true }))
+
 const WS_PORT = 4001
-const wss = new WebSocket.Server({ port: WS_PORT })
+const wss = new WebSocketServer({ port: 4001 })
 console.log(`🌐 WS server rodando em ws://localhost:${WS_PORT}`)
 
-const clients = new Set()
+let wsClient = null
 
-// --- WS CONNECTION ---
 wss.on("connection", (ws) => {
-  clients.add(ws)
-  console.log("🟢 Cliente conectado via WS")
+  wsClient = ws
+  console.log("🟢 Extensão conectada via WS")
 
   ws.on("close", () => {
-    clients.delete(ws)
-    console.log("🔴 Cliente desconectado")
+    wsClient = null
+    console.log("🔴 Extensão desconectada")
   })
 
-  ws.on("message", (raw) => {
-    try {
-      const msg = JSON.parse(raw)
-
-      // Logs para debug
-      if (msg.type === "WCMAPI_CALL") {
-        console.log(`📌 Método chamado: ${msg.method}`, msg.args)
-      }
-
-      if (msg.type === "WCMAPI_RESULT") {
-        console.log("📨 Resultado recebido da extensão:", msg)
-
-        // Broadcast para todos os clientes React
-        clients.forEach((client) => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify(msg.result)) // envia apenas o payload
-          }
-        })
-      }
-    } catch (err) {
-      console.error("❌ Erro ao processar mensagem WS:", err)
-    }
-  })
+  ws.on("message", (raw) => handleWSMessage(raw))
 })
 
-// --- FUNÇÃO PARA CHAMAR EXTENSÃO VIA WS ---
-async function sendToExtension(method, args = []) {
-  return new Promise((resolve, reject) => {
-    const ws = [...clients][0] // pega o primeiro cliente (extensão)
-    if (!ws || ws.readyState !== WebSocket.OPEN)
-      return reject(new Error("Extensão não conectada"))
+function handleWSMessage(raw) {
+  try {
+    const msg = JSON.parse(raw)
+    if (!msg.type) return
 
+    if (msg.type === "FLUIG_METHOD_CALL") {
+      console.log(`📌 Método chamado: ${msg.fluigFunctionPath}`, msg.args)
+    }
+
+    if (msg.type === "FLUIG_METHOD_RESULT") {
+      console.log("📨 Resultado recebido da extensão:", msg)
+      // Com cliente único, não precisamos broadcast
+    }
+  } catch (err) {
+    console.error("❌ Erro ao processar mensagem WS:", err)
+  }
+}
+
+async function callFluigMethod(fluigFunctionPath, args = []) {
+  if (!wsClient || wsClient.readyState !== WebSocket.OPEN)
+    throw new Error("Extensão não conectada")
+
+  return new Promise((resolve, reject) => {
     const id = Date.now() + "_" + Math.random().toString(16).slice(2)
-    const msg = { type: "WCMAPI_CALL", id, method, args }
+    const msg = { type: "FLUIG_METHOD_CALL", id, fluigFunctionPath, args }
 
     const handleMessage = (raw) => {
       try {
         const m = JSON.parse(raw)
-        if (m.type === "WCMAPI_RESULT" && m.id === id) {
-          ws.off("message", handleMessage)
+        if (m.type === "FLUIG_METHOD_RESULT" && m.id === id) {
+          wsClient.off("message", handleMessage)
           if (m.error) reject(new Error(m.error))
           else resolve(m.result)
         }
@@ -71,26 +64,24 @@ async function sendToExtension(method, args = []) {
       }
     }
 
-    ws.on("message", handleMessage)
-    ws.send(JSON.stringify(msg))
+    wsClient.on("message", handleMessage)
+    wsClient.send(JSON.stringify(msg))
   })
 }
 
-// --- ROTAS HTTP ---
-app.post("/wcmapi", async (req, res) => {
-  const { method, args } = req.body
-  console.log(`📌 [HTTP] Método solicitado: ${method}`, args)
+app.post("/fluig-proxy", async (req, res) => {
+  const { fluigFunctionPath, args } = req.body
+  console.log(`📌 [HTTP] Método solicitado: ${fluigFunctionPath}`, args)
 
   try {
-    const result = await sendToExtension(method, args)
+    const result = await callFluigMethod(fluigFunctionPath, args)
     res.json({ result })
   } catch (err) {
-    console.error(`❌ Erro ao processar ${method}:`, err)
+    console.error(`❌ Erro ao processar ${fluigFunctionPath}:`, err)
     res.json({ error: err.message })
   }
 })
 
-// --- INICIALIZAÇÃO DO HTTP SERVER ---
 const PORT = process.env.PORT || 4000
 app.listen(PORT, () => {
   console.log(`✅ Fluig proxy iniciado em http://localhost:${PORT}`)

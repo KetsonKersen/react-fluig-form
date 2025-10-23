@@ -1,11 +1,13 @@
 ;(function () {
   if (!parent) return
 
-  const ws = new WebSocket("ws://localhost:4001")
+  const WS_URL = "ws://localhost:4001"
+  const ws = new WebSocket(WS_URL)
 
-  ws.onopen = () => console.log("🟢 Extensão conectada ao WS backend")
+  ws.onopen = () =>
+    console.log(`🟢 Extensão conectada ao WS backend (${WS_URL})`)
 
-  async function safeParseMessage(data) {
+  async function parseMessageSafely(data) {
     try {
       if (!data) return null
       if (typeof data === "string" && data.trim()) return JSON.parse(data)
@@ -24,42 +26,46 @@
     return path.split(".").reduce((acc, key) => acc?.[key], obj)
   }
 
-  ws.onmessage = async (event) => {
-    const msg = await safeParseMessage(event.data)
+  async function executeFluigFunction(fluigFunctionPath, args = []) {
+    const fn = getNestedProperty(parent, fluigFunctionPath)
+    if (typeof fn !== "function") {
+      throw new Error(`${fluigFunctionPath} não é uma função`)
+    }
+
+    const context = fluigFunctionPath.includes("WCMAPI.")
+      ? getNestedProperty(
+          parent,
+          fluigFunctionPath.split(".").slice(0, -1).join(".")
+        )
+      : parent
+
+    return await fn.apply(context, args)
+  }
+
+  async function handleWSMessage(event) {
+    const msg = await parseMessageSafely(event.data)
     if (!msg || !msg.type) return
 
-    try {
-      if (msg.type === "WCMAPI_CALL") {
-        const { id, method, args } = msg
-        let result, error
+    if (msg.type === "FLUIG_METHOD_CALL") {
+      const { id, fluigFunctionPath, args } = msg
+      let result, error
 
-        try {
-          const fn = getNestedProperty(parent, method)
-          console.log("🧩 Método solicitado:", method)
-          console.log("🔍 Função resolvida:", fn)
-          console.log("chamada direta:", parent.window.WCMAPI.getUser())
-
-          if (typeof fn !== "function")
-            throw new Error(`${method} não é uma função`)
-
-          // 🔹 Corrige o contexto de execução (this)
-          const context = method.includes("WCMAPI.")
-            ? getNestedProperty(
-                parent,
-                method.split(".").slice(0, -1).join(".")
-              )
-            : parent
-
-          result = await fn.apply(context, args || [])
-        } catch (err) {
-          error = err.message
-        }
-
-        console.log("📤 Enviando resultado ao backend:", { id, result, error })
-        ws.send(JSON.stringify({ type: "WCMAPI_RESULT", id, result, error }))
+      try {
+        result = await executeFluigFunction(fluigFunctionPath, args)
+      } catch (err) {
+        error = err.message
       }
-    } catch (err) {
-      console.error("❌ Erro no WS da extensão:", err)
+
+      ws.send(
+        JSON.stringify({
+          type: "FLUIG_METHOD_RESULT",
+          id,
+          result,
+          error,
+        })
+      )
     }
   }
+
+  ws.onmessage = handleWSMessage
 })()
