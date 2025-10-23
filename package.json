@@ -2,14 +2,19 @@
   "name": "react-fluig",
   "private": true,
   "version": "0.0.0",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "npm-run-all --parallel dev:api dev:front",
+    "dev": "npm-run-all --parallel dev:api dev:front dev:ext",
     "dev:api": "npm --workspace=packages/api run dev",
     "dev:front": "npm --workspace=packages/react run dev",
+    "dev:ext": "chokidar 'packages/extension/manifest.template.json' '.env' -c 'node packages/extension/build-manifest.js'",
     "build": "npm --workspace=packages/react run build"
   },
   "devDependencies": {
+    "chokidar-cli": "^3.0.0",
+    "dotenv": "^16.3.1",
     "npm-run-all": "^4.1.5"
   }
 }

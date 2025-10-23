@@ -5,13 +5,13 @@
   "permissions": ["scripting", "activeTab", "storage"],
   "host_permissions": [
     "https://*.fluig.cloudtotvs.com.br/*",
-    "https://diefraengenharia187713.fluig.cloudtotvs.com.br/*"
+    "https://{{FLUIG_DOMAIN}}/*"
   ],
   "content_scripts": [
     {
       "matches": [
         "https://*.fluig.cloudtotvs.com.br/*",
-        "https://diefraengenharia187713.fluig.cloudtotvs.com.br/*"
+        "https://{{FLUIG_DOMAIN}}/*"
       ],
       "js": ["content-script.js"],
       "run_at": "document_end",
@@ -23,9 +23,10 @@
       "resources": ["page-script.js"],
       "matches": [
         "https://*.fluig.cloudtotvs.com.br/*",
-        "https://diefraengenharia187713.fluig.cloudtotvs.com.br/*"
+        "https://{{FLUIG_DOMAIN}}/*"
       ]
     }
   ],
   "icons": {}
 }
+
