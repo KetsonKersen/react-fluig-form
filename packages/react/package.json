@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node render-form.cjs",
+    "build": "vite build && node fluig-configs/render-form.cjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
