@@ -4,74 +4,74 @@
   const WS_URL = "ws://localhost:4001"
   const ws = new WebSocket(WS_URL)
 
-  ws.onopen = () =>
-    console.log(`🟢 Extensão conectada ao WS backend (${WS_URL})`)
+  ws.onopen = () => {
+    console.log("🟢 Extensão conectada ao backend")
+    const userActive = window.WCMAPI.getUser()
+    ws.send(
+      JSON.stringify({
+        type: "PAGE_STATUS",
+        connected: true,
+        userActive,
+      })
+    )
+  }
+
+  ws.onclose = () => {
+    console.log("🔴 Conexão WS encerrada")
+  }
+
+  // antes da aba fechar, informa desconexão
+  window.addEventListener("beforeunload", () => {
+    ws.send(JSON.stringify({ type: "PAGE_STATUS", connected: false }))
+  })
 
   async function parseMessageSafely(data) {
     try {
       if (!data) return null
-      if (typeof data === "string" && data.trim()) return JSON.parse(data)
-      if (data instanceof Blob && data.size > 0) {
-        const text = await data.text()
-        return JSON.parse(text)
-      }
-      return null
-    } catch (err) {
-      console.warn("⚠️ Mensagem WS inválida ou incompleta:", data)
+      if (typeof data === "string") return JSON.parse(data)
+      if (data instanceof Blob) return JSON.parse(await data.text())
+    } catch {
       return null
     }
   }
 
   function getNestedProperty(obj, path) {
-    if (path === "") return obj
-    return path.split(".").reduce((acc, key) => acc?.[key], obj)
+    return path ? path.split(".").reduce((acc, key) => acc?.[key], obj) : obj
   }
 
   async function executeFluigFunction(fluigFunctionPath, args = []) {
     const fn = getNestedProperty(parent, fluigFunctionPath)
-    if (fn === undefined) {
-      throw new Error(`O caminho não está disponivel`)
-    }
-    if (typeof fn !== "function") {
-      throw new Error(`Não é uma função`)
-    }
+    if (typeof fn !== "function")
+      throw new Error("Função inválida ou inexistente")
 
-    const pathParts = fluigFunctionPath.split(".")
-
-    const contextPath =
-      pathParts.length > 1 ? pathParts.slice(0, -1).join(".") : ""
-
+    const contextPath = fluigFunctionPath.split(".").slice(0, -1).join(".")
     const context = getNestedProperty(parent, contextPath)
 
     return await fn.apply(context, args)
   }
 
-  async function handleWSMessage(event) {
+  ws.onmessage = async (event) => {
     const msg = await parseMessageSafely(event.data)
-    if (!msg || !msg.type) return
+    if (!msg || msg.type !== "FLUIG_METHOD_CALL") return
 
-    if (msg.type === "FLUIG_METHOD_CALL") {
-      const { id, fluigFunctionPath, args } = msg
-      let result, error
+    const { id, fluigFunctionPath, args } = msg
+    let result, error
 
-      try {
-        result = await executeFluigFunction(fluigFunctionPath, args)
-      } catch (err) {
-        error = err.message
-      }
-
-      ws.send(
-        JSON.stringify({
-          type: "FLUIG_METHOD_RESULT",
-          id,
-          fluigFunctionPath,
-          args,
-          result,
-          error,
-        })
-      )
+    try {
+      result = await executeFluigFunction(fluigFunctionPath, args)
+    } catch (err) {
+      error = err.message
     }
-  }
 
-  ws.onmessage = handleWSMessage
+    ws.send(
+      JSON.stringify({
+        type: "FLUIG_METHOD_RESULT",
+        id,
+        fluigFunctionPath,
+        args,
+        result,
+        error,
+      })
+    )
+  }
 })()

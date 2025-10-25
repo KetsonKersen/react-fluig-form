@@ -1,18 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "Fluig Method Capture",
-  "description": "Extensão para capturar e proxy de métodos do Fluig",
+  "name": "Fluig Context Capture",
+  "description": "Extensão para capturar o contexto da página do Fluig",
   "version": "1.0",
   "permissions": ["scripting", "activeTab", "storage"],
   "host_permissions": [
-    "https://*.fluig.cloudtotvs.com.br/*",
-    "https://{{FLUIG_DOMAIN}}/*"
+    "https://*.fluig.cloudtotvs.com.br/*"
   ],
   "content_scripts": [
     {
       "matches": [
-        "https://*.fluig.cloudtotvs.com.br/*",
-        "https://{{FLUIG_DOMAIN}}/*"
+        "https://*.fluig.cloudtotvs.com.br/*"
       ],
       "js": ["content-script.js"],
       "run_at": "document_end",
@@ -23,8 +21,7 @@
     {
       "resources": ["page-script.js"],
       "matches": [
-        "https://*.fluig.cloudtotvs.com.br/*",
-        "https://{{FLUIG_DOMAIN}}/*"
+        "https://*.fluig.cloudtotvs.com.br/*"
       ]
     }
   ],

@@ -7,10 +7,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm-run-all --parallel --silent dev:api dev:front dev:ext",
+    "dev": "npm-run-all --parallel --silent dev:api dev:front",
     "dev:api": "npm --workspace=packages/api run dev",
     "dev:front": "npm --workspace=packages/react run dev",
-    "dev:ext": "chokidar 'packages/extension/manifest.template.json' '.env' -c 'node packages/extension/build-manifest.js' --silent",
     "build": "npm --workspace=packages/react run build"
   },
   "devDependencies": {
