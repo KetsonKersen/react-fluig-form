@@ -1,6 +1,5 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
-"../parentProxy";
 import App from "./App.jsx";
 
 (function initReactApp() {
