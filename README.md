@@ -14,7 +14,7 @@ Template para desenvolvimento de **formulários Fluig** usando React com hot-rel
 - Google Chrome (para extensão de desenvolvimento)
 - Ambiente Fluig ativo (cloudtotvs.com.br)
 
-> ***Nota:** Este template faz parte do CLI `create-react-fluig` e é utilizado especificamente para criar **formulários**, o template de widgets já está em desenvolvimento.
+> **Nota:** Este template faz parte do CLI `create-react-fluig` e é utilizado especificamente para criar **formulários**, o template de widgets já está em desenvolvimento.
  <!-- Para widgets, consulte o template [widget](../widget). -->
 
 ## 🚀 Instalação
