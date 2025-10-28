@@ -3,6 +3,7 @@
   "name": "Fluig Context Capture",
   "description": "Extensão para capturar o contexto da página do Fluig",
   "version": "1.0",
+  "license": "MIT",
   "permissions": ["scripting", "activeTab", "storage"],
   "host_permissions": [
     "https://*.fluig.cloudtotvs.com.br/*"
