@@ -1,6 +1,9 @@
+import React from "react";
 import { createRoot } from "react-dom/client";
+import "@fluig-configs/imports";
 import "./index.css";
 import App from "./App.jsx";
+import { isCreationMode, isEditMode } from "./utils/viewMode";
 
 (function initReactApp() {
   try {
@@ -12,16 +15,11 @@ import App from "./App.jsx";
 
     const isInIframe = window.self !== window.top;
     const isLocalhost = window.location.hostname === "localhost";
-    const params = new URLSearchParams(window.location.search);
 
-    const editParam = params.get("edit");        
-    const isCreationMode = !editParam;           
-    const isEditMode = editParam === "true";     
-    const isViewMode = editParam === "false";    
+    const shouldRenderReact =
+      isLocalhost || (isInIframe && (isCreationMode() || isEditMode()));
 
-    const shouldRenderReact = isLocalhost || (isInIframe && (isCreationMode || isEditMode));
-
-    console.log("🔎 Fluig detectado — edit param:", editParam);
+    console.log("🔎 Fluig detectado — edit param:", window.location.search);
     console.log("⚛️ React será renderizado?", shouldRenderReact);
 
     if (shouldRenderReact) {
@@ -30,15 +28,26 @@ import App from "./App.jsx";
         if (el.name) prefilledValues[el.name] = el.value;
       });
 
-      createRoot(rootEl).render(
-        <>
-          <App prefilledValues={prefilledValues} />
-        </>
-      );
+      createRoot(rootEl).render(<App prefilledValues={prefilledValues} />);
     } else {
       console.log("🚫 Visualização apenas — React não montado.");
-    }
 
+      document.querySelectorAll("input, textarea, select, .custom-select").forEach((el) => {
+        if (el.classList.contains("custom-select")) {
+          el.classList.add("hidden");
+        }
+
+        if (!el.name) return;
+
+        const span = document.createElement("span");
+        span.className = el.className || "form-control";
+        span.style.display = "inline-block";
+        span.style.width = "100%";
+        span.textContent = el.value || "-";
+
+        el.replaceWith(span);
+      });
+    }
   } catch (err) {
     console.error("Erro ao inicializar React:", err);
   }
