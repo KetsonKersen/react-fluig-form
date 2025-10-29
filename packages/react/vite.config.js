@@ -10,11 +10,29 @@ const env = loadEnv(process.env.NODE_ENV, path.resolve(__dirname, "../../"), "")
 export default defineConfig({
   plugins: [react()],
   logLevel: "info",
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+      "@fluig-configs": path.resolve(__dirname, "fluig-configs"),
+    },
+  },
+
   define: {
     "import.meta.env.VITE_FLUIG_BASE_URL": JSON.stringify(
       env.VITE_FLUIG_BASE_URL
     ),
   },
+
+  server: {
+    fs: {
+      allow: [
+        path.resolve(__dirname),
+        path.resolve(__dirname, "src"),
+        path.resolve(__dirname, "fluig-configs"),
+      ],
+    },
+  },
+
   build: {
     outDir: "dist",
     rollupOptions: {
