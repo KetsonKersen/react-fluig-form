@@ -2,10 +2,16 @@ import { defineConfig, loadEnv } from "vite"
 import react from "@vitejs/plugin-react"
 import path from "path"
 import dotenv from "dotenv"
+import fs from "fs"
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env"), quiet: true })
 
 const env = loadEnv(process.env.NODE_ENV, path.resolve(__dirname, "../../"), "")
+
+// Lê o package.json raiz
+const rootPackageJson = path.resolve(__dirname, "../..", "package.json")
+const pkg = JSON.parse(fs.readFileSync(rootPackageJson, "utf-8"))
+const FormName = pkg.name
 
 export default defineConfig({
   plugins: [react()],
@@ -34,7 +40,7 @@ export default defineConfig({
   },
 
   build: {
-    outDir: "dist",
+    outDir: `../../forms/${FormName}`,
     rollupOptions: {
       input: path.resolve(__dirname, "src/main.jsx"),
       output: {

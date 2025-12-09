@@ -9,6 +9,11 @@ const React = require("react")
 const { renderToStaticMarkup } = require("react-dom/server")
 const App = require("../src/App.jsx").default
 
+// Lê o package.json raiz
+const rootPackageJson = path.resolve(__dirname, "../../..", "package.json")
+const pkg = JSON.parse(fs.readFileSync(rootPackageJson, "utf-8"))
+const FormName = pkg.name
+
 const formHTML = renderToStaticMarkup(React.createElement(App))
 
 const finalHtml = `
@@ -28,7 +33,7 @@ const finalHtml = `
 </html>
 `
 
-const distPath = path.resolve(__dirname, "dist/form.html")
+const distPath = path.resolve(__dirname, `../../../forms/${FormName}/form.html`)
 
 fs.mkdirSync(path.dirname(distPath), { recursive: true })
 fs.writeFileSync(distPath, finalHtml)
