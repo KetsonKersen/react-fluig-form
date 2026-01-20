@@ -1,24 +1,45 @@
 {
-  "name": "react_fluig_form",
+  "name": "ReactFluig",
   "private": true,
   "version": "1.0.0",
   "license": "MIT",
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "dev": "npm-run-all --parallel --silent dev:api dev:front",
-    "dev:api": "npm --workspace=packages/api run dev",
-    "dev:front": "npm --workspace=packages/react run dev",
-    "build": "npm --workspace=packages/react run build"
-  },
-  "devDependencies": {
-    "chokidar-cli": "^3.0.0",
-    "dotenv": "^16.3.1",
-    "npm-run-all": "^4.1.5"
+    "dev": "npm-run-all --parallel --silent dev:proxy dev:vite",
+    "dev:proxy": "fluig-kit dev",
+    "dev:vite": "vite",
+    "build": "vite build && cross-env FORCE_COLOR=1 node build.cjs",
+    "preview": "vite preview",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "chalk": "^5.6.2"
+    "@fluig-kit/cli": "^1.0.5",
+    "@fluig-kit/core": "^1.0.5",
+    "@fluig-kit/ecm": "^1.0.10",
+    "@fluig-kit/extension": "^1.0.2",
+    "@hookform/resolvers": "^3.10.0",
+    "chalk": "^5.3.0",
+    "date-fns": "^4.1.0",
+    "lucide-react": "^0.546.0",
+    "react": "^18.3.1",
+    "react-datepicker": "^7.6.0",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.71.0",
+    "react-imask": "^7.6.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.6",
+    "@babel/preset-react": "^7.27.0",
+    "@babel/register": "^7.28.6",
+    "@vitejs/plugin-react": "^4.3.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.0",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
+    "ignore-styles": "^5.0.1",
+    "npm-run-all": "^4.1.5",
+    "vite": "^5.4.0"
   }
 }

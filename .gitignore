@@ -24,3 +24,5 @@ forms*
 *.njsproj
 *.sln
 *.sw?
+.history
+.extension

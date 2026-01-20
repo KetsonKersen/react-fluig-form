@@ -1,5 +1,4 @@
 const FLUIG_BASE_URL = import.meta.env.VITE_FLUIG_BASE_URL
-console.log("FLUIG_BASE_URL", FLUIG_BASE_URL)
 
 const fluigStyles = [
   `${FLUIG_BASE_URL}/style-guide/css/fluig-style-guide.min.css`,
