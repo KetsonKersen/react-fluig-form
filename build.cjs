@@ -28,7 +28,7 @@ const pkg = JSON.parse(fs.readFileSync(rootPackageJson, "utf-8"))
 const FormName = pkg.name
 
 try {
-  const ALL_SCHEMAS = Object.values([])
+  const ALL_SCHEMAS = Object.values(SECTIONS_REGISTRY)
     .map((s) => s.schema)
     .filter(Boolean)
 

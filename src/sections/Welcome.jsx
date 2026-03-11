@@ -9,26 +9,6 @@ import {
 import { parentProxy } from "@fluig-kit/core"
 
 export default function Welcome() {
-  const [user, setUser] = useState()
-  const [atividade, setAtividade] = useState()
-
-  useEffect(() => {
-    async function getUser() {
-      const result_user =
-        (await parentProxy.window.WCMAPI.getUser()) || "Usuário não encontrado"
-      const result_atividade =
-        (await parentProxy.parent.window.ECM_WKFView.selectActivity()) ||
-        "Sem atividade"
-
-      setUser(result_user)
-      setAtividade(result_atividade)
-
-      top.console.log("user react", result_user)
-      top.console.log("atividadet", result_atividade)
-    }
-    getUser()
-  }, [])
-
   return (
     <div className="container">
       <div className="icons">

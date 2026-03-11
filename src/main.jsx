@@ -1,21 +1,21 @@
-import React from "react"
 import { createRoot } from "react-dom/client"
-import "./index.css"
 import App from "./App.jsx"
-// import { schemaBase } from "./form/schemas/schema.js"
+import "./index.css"
 import {
   FluigApiProvider,
   FluigRuntimeProvider,
   SchemaRegistryProvider,
 } from "@fluig-kit/ecm"
-import "@tech-diefra/fluig-ui/dist/style.css"
+
+import "diefra_ecm_ui/style.css"
+import { schemaBase } from "./form/schemas/schema.js"
 
 const DEV_CONFIG = {
-  // enabled: true,
-  // activityId: 6,
-  // previousActivityId: 40,
-  // isDev: true,
-  // isView: false,
+  enabled: true,
+  activityId: 0,
+  isDev: true,
+  isView: false,
+  // previousActivityId: 0,
   // showDebugSubmit: true,
   // showDebugLogs: true,
 }
@@ -27,12 +27,13 @@ const CONFIG_API = {
 
 ;(function initReactApp() {
   const rootEl = document.getElementById("root")
+  console.log("rootEl", rootEl)
   if (!rootEl) return
 
   createRoot(rootEl).render(
     <FluigRuntimeProvider devConfig={DEV_CONFIG}>
       <FluigApiProvider config={CONFIG_API}>
-        <SchemaRegistryProvider baseSchema={[]}>
+        <SchemaRegistryProvider baseSchema={schemaBase}>
           <App />
         </SchemaRegistryProvider>
       </FluigApiProvider>

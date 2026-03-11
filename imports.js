@@ -1,7 +1,7 @@
 const FLUIG_BASE_URL = import.meta.env.VITE_FLUIG_BASE_URL
 
 const fluigStyles = [
-  `${FLUIG_BASE_URL}/style-guide/css/fluig-style-guide.min.css`,
+  `${FLUIG_BASE_URL}/style-guide/css/fluig-style-guide-flat.min.css`,
   `${FLUIG_BASE_URL}/portal/resources/merged/wcm_global.css`,
 ]
 
