@@ -27,13 +27,12 @@ const CONFIG_API = {
 
 ;(function initReactApp() {
   const rootEl = document.getElementById("root")
-  console.log("rootEl", rootEl)
   if (!rootEl) return
 
   createRoot(rootEl).render(
     <FluigRuntimeProvider devConfig={DEV_CONFIG}>
       <FluigApiProvider config={CONFIG_API}>
-        <SchemaRegistryProvider baseSchema={schemaBase}>
+        <SchemaRegistryProvider>
           <App />
         </SchemaRegistryProvider>
       </FluigApiProvider>
